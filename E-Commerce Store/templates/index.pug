@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='css/styles.css')
+  body
+    header
+      h1= message
+      nav
+        ul
+          li: a(href='#') Home
+          li: a(href='#') Products
+          li: a(href='#') About Us
+          li: a(href='#') Contact Us
+    section
+      h2 Featured Products
+      .products
+        .product
+          img(src="/css/images/product1.jpg" alt="Shoes")
+          h3 Adidas Shoes
+          p Trendy shoes. Only $50!
+        .product
+          img(src="/css/images/product2.jpg" alt="Jacket")
+
+          h3 H&M
+          p Stylish jacket. Only $75!
+    footer
+      p © 2024 Trendify

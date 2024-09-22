@@ -1,0 +1,17 @@
+{
+  "name": "trendify",
+  "version": "1.0.0",
+  "description": "E-commerce store",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.js"
+  },
+  "author": "Raman",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0",
+    "node.js": "^0.0.1-security",
+    "nodemon": "^3.1.4",
+    "pug": "^3.0.3"
+  }
+}
