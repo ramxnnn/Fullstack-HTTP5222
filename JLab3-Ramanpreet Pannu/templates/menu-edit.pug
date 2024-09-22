@@ -1,0 +1,20 @@
+extends layout
+
+block layout-content
+  h1.page-title Edit Menu Link
+  if (link)
+    form(method="post", action="/admin/menu/edit/submit")
+      input(type="hidden", name="linkId", value=link._id)
+
+      label(for="name") Link Name:
+      input(type="text", name="name", value=link.name, required)
+
+      label(for="path") Link Path:
+      input(type="text", name="path", value=link.path, required)
+
+      label(for="weight") Link Weight:
+      input(type="number", name="weight", value=link.weight, required)
+
+      button(type="submit") Save Changes
+  else
+    p Link not found.

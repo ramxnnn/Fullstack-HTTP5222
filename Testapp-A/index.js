@@ -95,3 +95,4 @@ async function addLink(linkToAdd) {
     await db.collection("menuLinks").insertOne(linkToAdd);
     console.log(`Added ${linkToAdd} to menuLinks`)
 }
+
