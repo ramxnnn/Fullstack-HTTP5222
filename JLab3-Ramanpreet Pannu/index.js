@@ -7,7 +7,6 @@ const dbUrl = "mongodb://127.0.0.1:27017/"; // connection string for MongoDB (us
 const client = new MongoClient(dbUrl); // create a new client by passing in the connection string
 
 // SET UP EXPRESS APP
-
 const app = express(); // create express application
 const port = process.env.PORT || "8888"; // set up a port number to run the application from.
 
@@ -16,7 +15,6 @@ app.set("views", path.join(__dirname, "templates")); // set the "views" Express 
 app.set("view engine", "pug"); // set Express to use "pug" as the template engine (setting: "view engine")
 
 // SET UP THE FOLDER PATH FOR STATIC FILES (e.g. CSS, client-side jS, image files)
-
 app.use(express.static(path.join(__dirname, "public")));
 
 // Convert URLENCODED FORMAT (FOR GET/POST REQUEST) TO JSON
@@ -25,17 +23,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // use JSON
 
 // PAGE ROUTES
-// if you want to use an asynchronous function in your callback function(see below), you need to also make your callback function asynchronous
 app.get("/", async (request, response) => {
     let links = await getLinks();
     console.log(links);
-    // response.status(200).send("Hello");
-    // let test = {
-    //     message: "Hello!"
-    // };
-    // response.json(test);
     response.render("index", { title: "Home", menu: links }); // renders /templates/layout.pug
-}); // at the root of my application if i make a get request there then my callback function will send a server code 200 and also send his text "hello"
+}); 
 
 // Added async to about route as await is used
 app.get("/about", async (request, response) => {
@@ -43,7 +35,7 @@ app.get("/about", async (request, response) => {
     response.render("about", { title: "About", menu: links });
 });
 
-// Admin Page Paths (fixed syntax error in route definition)
+// Admin Page Paths
 app.get("/admin/menu", async (request, response) => {
     let links = await getLinks();
     response.render("menu-list", { title: "Administer menu", menu: links });
@@ -55,10 +47,6 @@ app.get("/admin/menu/add", async (request, response) => {
 })
 
 app.post("/admin/menu/add/submit", async (request, response) => {
-    // get data from form (data will be in request)
-    // POST form: get data from request.body
-    // GET form: get data from request.query
-    // console.log(request.body)
     let newLink = {
         weight: parseInt(request.body.weight),
         path: request.body.path,
@@ -69,6 +57,28 @@ app.post("/admin/menu/add/submit", async (request, response) => {
     await addLink(newLink);
 
     // Redirect to admin menu list or show a success message
+    response.redirect("/admin/menu");
+});
+
+// EDIT FUNCTIONALITY
+app.get("/admin/menu/edit", async (request, response) => {
+    if (request.query.linkId) {
+        let linkToEdit = await getSingleLink(request.query.linkId);
+        let links = await getLinks();
+        response.render("menu-edit", { title: "Edit Menu Link", menu: links, editLink: linkToEdit });
+    } else {
+        response.redirect("/admin/menu");
+    }
+});
+
+app.post("/admin/menu/edit/:id/submit", async (request, response) => {
+    const idFilter = { _id: new ObjectId(request.body.linkId) };
+    const link = {
+        weight: parseInt(request.body.weight),
+        path: request.body.path,
+        name: request.body.name
+    };
+    await editLink(idFilter, link);
     response.redirect("/admin/menu");
 });
 
@@ -93,14 +103,25 @@ async function connection() {
 async function getLinks() {
     db = await connection(); // use await because connection() is asynchronous
     let results = db.collection("menuLinks").find({}); // find all so no query({})
-    // find() returns an object of type FindCursor, so we need to run toArray() to convert to a JSON array we can use
     return await results.toArray(); // return the array of data
+}
+
+async function getSingleLink(id) {
+    db = await connection();
+    return await db.collection("menuLinks").findOne({ _id: new ObjectId(id) }); // return single link
 }
 
 async function addLink(linkToAdd) {
     db = await connection();
     await db.collection("menuLinks").insertOne(linkToAdd);
     console.log(`Added ${linkToAdd} to menuLinks`)
+}
+
+// EDIT LINK FUNCTION
+async function editLink(filter, link) {
+    db = await connection();
+    await db.collection("menuLinks").updateOne(filter, { $set: link });
+    console.log(`Updated link with id ${filter._id}`);
 }
 
 // DELETE LINK FUNCTION
@@ -110,4 +131,3 @@ async function deleteLink(id) {
     await db.collection("menuLinks").deleteOne(filter); // delete the link from the database
     console.log(`Deleted link with id ${id}`);
 }
-

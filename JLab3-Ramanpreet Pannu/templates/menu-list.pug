@@ -5,17 +5,17 @@ block layout-content
     a(href="/admin/menu/add") + Add new menu link
     table
         thead
-            th Link text
-            th Operations
+            tr
+                th Link text
+                th Operations
         tbody
             each link in menu
                 tr
                     td #{link.name} (#{link.path})
                     td
                         form(method="get", action="/admin/menu/delete")
-                              input(type="hidden", name="linkId", value=link._id)
-                              button(type="submit") Delete
-
+                            input(type="hidden", name="linkId", value=link._id)
+                            button(type="submit") Delete
                     td
                         form(method="get", action="/admin/menu/edit")
                             input(type="hidden", name="linkId", value=link._id)
