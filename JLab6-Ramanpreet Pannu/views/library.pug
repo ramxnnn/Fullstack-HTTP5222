@@ -1,0 +1,14 @@
+extends layout
+
+block main-content
+  - 
+    // Extracting data from the library Placemark
+    let lName = library.querySelector("name").textContent; 
+    let lAddr = library.querySelector("address").textContent; 
+    let lPhone = library.querySelector("phoneNumber").textContent; 
+
+  h1 #{lName} 
+  p Address: #{lAddr} 
+  p Phone: #{lPhone} 
+ 
+

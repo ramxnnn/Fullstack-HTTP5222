@@ -1,0 +1,16 @@
+extends layout
+
+block main-content
+  - 
+    let pName = park.querySelector("LocationName").textContent;
+    let pAddr = park.querySelector("Address").textContent;
+    let pPostCode = park.querySelector("PostalCode").textContent;
+    let pFacilities = park.querySelectorAll("FacilityDisplayName");
+  //- pFacilities represents an array of <FacilityDisplayName> elements
+  h1 #{pName}
+  p #{pAddr}
+  p #{pPostCode}
+  h2 Available facilities 
+  ul 
+    each f in pFacilities 
+      li #{f.textContent}
