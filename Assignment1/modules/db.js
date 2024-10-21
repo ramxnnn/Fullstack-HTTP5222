@@ -99,6 +99,6 @@ module.exports = {
   initializeData,
   getEvents,   // The function to get events
   getVenues,   // The function to get venues
-  addEvent,
-  addVenue
+  addEvent,    // the function to add events
+  addVenue     // the function to add venues
 };
