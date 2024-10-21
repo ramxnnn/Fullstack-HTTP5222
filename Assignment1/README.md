@@ -1,17 +1,19 @@
-# Artist and Artwork Portfolio
+# Event Planner App
 
-## Link for web: https://http5222-1.onrender.com
+## Link for Web: [https://http5222-1.onrender.com](https://http5222-1.onrender.com)
+
 ## Introduction
 
-Welcome to the **Artist and Artwork Portfolio** application! This Node.js application allows users to manage and showcase a portfolio of artists and their artworks. Users can easily add new artists and artworks, view existing entries, and get a glimpse into the creative world of art and its creators. 
+Welcome to the **Event Planner App**! This Node.js application allows users to manage and organize events and venues seamlessly. Users can add new events and venues, view existing entries, and explore a variety of event options for planning their next gathering.
 
-The application is designed with simplicity in mind, making it user-friendly and efficient. Whether you're an artist looking to showcase your work or an art enthusiast wanting to explore various artists, this application serves as a handy tool for you.
+The application is designed with a user-friendly interface, making it efficient for both event organizers and attendees. Whether you’re planning a community gathering, a conference, or any other type of event, this app is your go-to tool!
 
 ## Features
 
-- **Add Artists**: Users can fill out a form to add new artists, providing details such as name, biography, and email.
-- **Add Artworks**: Users can add artworks with relevant details including title, description, and year of creation.
-- **View Listings**: All added artists and artworks are displayed in a structured format for easy viewing.
+- **Add Events**: Users can fill out a form to add new events, providing details such as title, date, location, and description.
+- **Add Venues**: Users can add venue information, including name, address, capacity, and available amenities.
+- **View Listings**: All added events and venues are displayed in a structured format for easy viewing.
+- **Responsive Design**: The application is designed to be mobile-friendly, ensuring a smooth experience on all devices.
 
 ## Technologies Used
 
@@ -21,7 +23,7 @@ This project utilizes a range of technologies, including:
 - **Express**: A web application framework for Node.js to build web applications.
 - **Pug**: A template engine for rendering HTML views.
 - **MongoDB**: A NoSQL database for data storage and retrieval.
-- **CSS**: For styling the application and making it visually appealing.
+- **CSS**: Styled with Bootstrap for a visually appealing and responsive design.
 
 ## Prerequisites
 
@@ -37,7 +39,17 @@ Before running the application, ensure you have the following installed on your 
    Clone this repository to your local machine using:
 
    ```bash
-   git clone https://github.com/your-username/artist-artwork-portfolio.git
+   git clone https://github.com/your-username/event-planner-app.git
+
+
+## Installation
+
+1. **Clone the Repository**
+
+   Clone this repository to your local machine using:
+
+   ```bash
+   git clone https://github.com/ramxnnn/Fullstack-HTTP5222/tree/main/Assignment1
 
 2. **To install node and other dependencies
     npm install
