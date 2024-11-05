@@ -1,6 +1,6 @@
 # Event Planner App
 
-## Link for Web: [https://http5222-1.onrender.com](https://http5222-1.onrender.com)
+## Link for Web: https://assignment1-fullstack.onrender.com
 
 ## Introduction
 
