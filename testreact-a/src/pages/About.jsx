@@ -7,9 +7,9 @@ export default function About() {
   }, []);
 
   return (
-    <main>
+    <main className="about-page">
       <h1>About this site</h1>
-      <p>This is just a site to test out React.</p>
+      <p>This is a Trivia Game.</p>
       <Link to="/">Go back to the home page</Link>
     </main>
   );
