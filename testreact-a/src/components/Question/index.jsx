@@ -9,7 +9,7 @@ export default function Question() {
   useEffect(() => {
     async function fetchQuestion() {
       try {
-        const response = await fetch('https://opentdb.com/api.php?amount=10');
+        const response = await fetch('https://opentdb.com/api.php?amount=1&type=boolean');
         const data = await response.json();
         const questionData = data.results[0];
         setCategory(questionData.category);
