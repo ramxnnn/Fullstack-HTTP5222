@@ -1,0 +1,21 @@
+extends layout
+
+block main-content
+  h1.page-title Freelancer Workspaces
+  
+  //- Form for user to input location (city or coordinates)
+  form(action="/workspaces", method="get")
+    label(for="location") Enter Location:
+    input(type="text" id="location" name="location" placeholder="e.g. Toronto" value="")
+    button(type="submit") Search Workspaces
+
+  //- Display workspaces if any are found
+  if workspaces && workspaces.length > 0
+    ul.workspace-list
+      each workspace in workspaces
+        li
+          h2 #{workspace.name}
+          p Address: #{workspace.formatted_address}
+          p Rating: #{workspace.rating}
+  else
+    p No workspaces found for the specified location.
