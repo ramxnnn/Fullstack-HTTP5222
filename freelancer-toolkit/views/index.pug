@@ -1,21 +1,12 @@
-html
-  head
-    title Currency Converter
-  body
-    h1 Currency Converter
+extends common/layout
 
-    form(id="convertForm")
-      input(type="number" id="amount" placeholder="Amount to convert" required)
-      select(id="fromCurrency")
-        option(value="USD") USD
-        option(value="EUR") EUR
-        option(value="INR") INR
-        // Add more currencies as needed
-      select(id="toCurrency")
-        option(value="INR") INR
-        option(value="USD") USD
-        option(value="EUR") EUR
-        // Add more currencies as needed
-      button(type="submit") Convert
-
-    p#convertedAmount
+block content
+  h1 Freelancer Toolkit
+  p Welcome to your toolkit for freelancers! Explore the features below:
+  ul
+    li 
+      a(href="/currency") Currency Converter
+    li 
+      a(href="/workspaces") Workspace Locator
+    li 
+      a(href="/timezones") Time Zone Finder

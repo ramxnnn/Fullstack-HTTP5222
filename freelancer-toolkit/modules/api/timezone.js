@@ -1,29 +1,27 @@
-const timezoneAPIBaseUrl = "https://maps.googleapis.com/maps/api/timezone/json"; // Base URL for the Time Zone API
+const axios = require("axios");
 
-/*
- * Functions for Time Zone API requests.
- */
+exports.getTimezone = async (lat, lng, timestamp) => {
+    const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${process.env.TIMEZONE_API_KEY}`;
 
-// Function to retrieve time zone information based on latitude, longitude, and timestamp
-async function getTimeZone(latitude, longitude, timestamp) {
-  const reqUrl = `${timezoneAPIBaseUrl}?location=${latitude},${longitude}&timestamp=${timestamp}&key=${process.env.GOOGLE_API_KEY}`;
+    try {
+        console.log("Fetching timezone data from:", url); // Log the full URL for debugging
+        const response = await axios.get(url);
 
-  // Sending the GET request to fetch the time zone information
-  let response = await fetch(reqUrl, {
-    method: "GET", // Default GET method
-    headers: {
-      "Content-Type": "application/json", // Set content type to application/json
-    },
-  });
+        console.log("API Response:", response.data); // Log the response data for debugging
 
-  // Check if the response is successful
-  if (!response.ok) {
-    throw new Error(`Failed to fetch time zone: ${response.statusText}`);
-  }
-
-  return await response.json(); // Return the JSON response containing the time zone information
-}
-
-module.exports = {
-  getTimeZone,
+        if (response.data.status === "OK") {
+            return {
+                timeZoneId: response.data.timeZoneId,
+                timeZoneName: response.data.timeZoneName,
+                dstOffset: response.data.dstOffset,
+                rawOffset: response.data.rawOffset
+            };
+        } else {
+            console.error("Timezone API Error:", response.data);
+            throw new Error(response.data.errorMessage || "Failed to fetch timezone data.");
+        }
+    } catch (error) {
+        console.error("Error fetching timezone data:", error.message);
+        throw new Error("Error fetching timezone data.");
+    }
 };

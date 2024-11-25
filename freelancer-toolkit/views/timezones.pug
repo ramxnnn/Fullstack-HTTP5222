@@ -1,0 +1,15 @@
+// views/timezones.pug
+
+doctype html
+html(lang="en")
+  head
+    title= title
+  body
+    h1 Timezone Information
+    if timezone
+      p Timezone ID: #{timezone.timeZoneId}
+      p Timezone Name: #{timezone.timeZoneName}
+      p DST Offset: #{timezone.dstOffset} seconds
+      p Raw Offset: #{timezone.rawOffset} seconds
+    else
+      p Could not fetch timezone data.

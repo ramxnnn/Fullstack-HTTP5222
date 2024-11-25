@@ -1,41 +1,20 @@
-// currency.js
+const axios = require("axios");
 
-const https = require('https');  // Using native https module
+exports.getExchangeRates = async (from, to, amount = 1) => {
+    const url = `https://v6.exchangerate-api.com/v6/${process.env.EXCHANGE_API_KEY}/pair/${from}/${to}`;
+    try {
+        const response = await axios.get(url);
 
-const getExchangeRates = (baseCurrency, callback) => {
-    const url = `https://api.exchangerate-api.com/v4/latest/${baseCurrency}`;
-
-    https.get(url, (response) => {
-        let data = '';
-
-        // Collecting data chunks
-        response.on('data', (chunk) => {
-            data += chunk;
-        });
-
-        // On response end, parse data
-        response.on('end', () => {
-            try {
-                const jsonData = JSON.parse(data);
-                callback(null, jsonData.rates);  // Return the rates
-            } catch (error) {
-                callback('Error parsing data');
-            }
-        });
-    }).on('error', (error) => {
-        callback('Error fetching data: ' + error.message);
-    });
-};
-
-const convertCurrency = (amount, fromCurrency, toCurrency, callback) => {
-    getExchangeRates(fromCurrency, (error, rates) => {
-        if (error) {
-            callback(error, null);
+        if (response.data.result === "success") {
+            const rate = response.data.conversion_rate;
+            console.log(`Conversion rate for ${from} to ${to}: ${rate}`);
+            const convertedAmount = (rate * amount).toFixed(2);  // Round to 2 decimal places
+            return convertedAmount;  // Return the converted amount as a string
         } else {
-            const convertedAmount = amount * rates[toCurrency];
-            callback(null, convertedAmount.toFixed(2));  // Return the converted amount
+            throw new Error(response.data["error-type"] || "Unknown error occurred.");
         }
-    });
+    } catch (error) {
+        console.error("Error fetching exchange rates:", error.message);
+        throw new Error("Unable to fetch exchange rates. Please check your input or try again later.");
+    }
 };
-
-module.exports = { convertCurrency };
