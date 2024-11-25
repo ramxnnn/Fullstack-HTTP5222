@@ -1,15 +1,28 @@
-// views/timezones.pug
-
 doctype html
 html(lang="en")
   head
     title= title
   body
     h1 Timezone Information
+
+    //- Form to input lat and lng
+    form(method="get", action="/timezones")
+      label(for="lat") Latitude:
+      input(type="text", name="lat", id="lat", required)
+      
+      label(for="lng") Longitude:
+      input(type="text", name="lng", id="lng", required)
+      
+      button(type="submit") Get Timezone
+
     if timezone
       p Timezone ID: #{timezone.timeZoneId}
       p Timezone Name: #{timezone.timeZoneName}
       p DST Offset: #{timezone.dstOffset} seconds
       p Raw Offset: #{timezone.rawOffset} seconds
     else
-      p Could not fetch timezone data.
+      p Could not fetch timezone data or no data available.
+
+    //- Optionally, show error message if lat or lng are missing
+    if error
+      p(style="color:red") #{error}

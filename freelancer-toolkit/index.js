@@ -58,19 +58,36 @@ app.get("/workspaces", async (req, res) => {
 });
 
 app.get("/timezones", async (req, res) => {
-  const { lat, lng } = req.query; // Ensure lat and lng are passed correctly
+  const { lat, lng } = req.query; // Extract lat and lng from query
+
+  // Validate that lat and lng are provided
+  if (!lat || !lng) {
+    return res.render("timezones", {
+      title: "Time Zones",
+      error: "Please provide both latitude and longitude."
+    });
+  }
+
   const timestamp = Math.floor(Date.now() / 1000); // Use the current timestamp
 
   try {
-      const tz = await timezone.getTimezone(lat, lng, timestamp);
-      res.render("timezones", { 
-          title: "Time Zones", 
-          timezone: tz 
-      });
+    // Call the timezone API with valid lat, lng
+    const tz = await timezone.getTimezone(lat, lng, timestamp);
+
+    // Render the timezones view with timezone data
+    return res.render("timezones", {
+      title: "Time Zones",
+      timezone: tz
+    });
   } catch (error) {
-      res.status(500).send({ error: error.message });
+    console.error("Error fetching timezone data:", error.message);
+    res.render("timezones", {
+      title: "Time Zones",
+      error: "Failed to fetch timezone data. Please try again."
+    });
   }
 });
+
 
 // Start Server
 app.listen(port, () => {
