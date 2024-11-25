@@ -2,16 +2,17 @@ extends common/layout
 
 block content
   h1 Currency Converter
-  form(id="currencyForm", method="get", action="/currency")
+
+  form(id="currencyForm", method="get", action="#")
     div
       label(for="from") From Currency:
-      input(type="text", name="from", id="from", placeholder="e.g., USD", value="", required=true)
+      input(type="text", name="from", id="from", placeholder="e.g., USD", required)
     div
       label(for="to") To Currency:
-      input(type="text", name="to", id="to", placeholder="e.g., EUR", value="", required=true)
+      input(type="text", name="to", id="to", placeholder="e.g., EUR", required)
     div
       label(for="amount") Amount:
-      input(type="number", name="amount", id="amount", placeholder="e.g., 100", value="", required=true)
+      input(type="number", name="amount", id="amount", placeholder="e.g., 100", required)
     button(type="submit") Convert
 
   // Show error message if there's an error passed from the backend

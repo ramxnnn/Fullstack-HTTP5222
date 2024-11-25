@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
 const currency = require("./modules/api/currency");
-const places = require("./modules/api/places");
+const places = require("./modules/api/places"); // Import your places.js file here, only once
 const timezone = require("./modules/api/timezone");
 
 dotenv.config();
@@ -25,43 +25,36 @@ app.get("/", (req, res) => {
 
 app.get("/currency", async (req, res) => {
   const { from, to, amount } = req.query;
-  console.log("Received query parameters:", from, to, amount);
 
-  if (!from || !to) {
+  if (!from || !to || !amount) {
     return res.json({
       convertedAmount: null,
-      error: "Please provide both 'from' and 'to' currencies."
+      error: "Please provide both 'from' and 'to' currencies and an amount."
     });
   }
 
   const amountValue = parseFloat(amount) || 1;
 
   try {
-    // Call the currency conversion function
-    const converted = await currency.getExchangeRates(from, to, amountValue);
-    console.log(`Converted Amount: ${converted}`);
+    const converted = await currency.getExchangeRates(from, to, amountValue);  // Call your currency conversion logic
     return res.json({
-      convertedAmount: converted,  // Send the converted amount as part of the JSON response
-      error: null
+      convertedAmount: converted,
     });
   } catch (error) {
     console.error("Error fetching exchange rates:", error.message);
-    return res.json({
-      convertedAmount: null,
-      error: "Sorry, there was an error fetching the conversion rate."
-    });
+    return res.json({});
   }
 });
 
-
+// Existing route for the Workspace Locator
 app.get("/workspaces", async (req, res) => {
-    const location = req.query.location || "Toronto";
-    try {
-        const workspaces = await places.findWorkspaces(location);
-        res.render("workspace", { title: "Workspace Locator", workspaces });
-    } catch (error) {
-        res.status(500).send({ error: error.message });
-    }
+  const location = req.query.location || "Toronto";  // Default to Toronto if no location is provided
+  try {
+    const workspaces = await places.findWorkspaces(location);
+    res.json(workspaces);  // Return workspaces as JSON
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
 });
 
 app.get("/timezones", async (req, res) => {
