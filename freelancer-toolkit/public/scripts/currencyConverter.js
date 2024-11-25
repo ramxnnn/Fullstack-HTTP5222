@@ -20,17 +20,22 @@ document.addEventListener('DOMContentLoaded', function() {
   
       // Fetch the conversion result using AJAX
       fetch(`/currency?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.convertedAmount) {
-            resultDiv.innerHTML = `<h2>Conversion Result</h2><p>${amount} ${fromCurrency} is equal to ${data.convertedAmount} ${toCurrency}</p>`;
-          } else {
-            resultDiv.innerHTML = "<p>Sorry, there was an issue with the conversion.</p>";
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          resultDiv.innerHTML = "<p>Sorry, there was an error fetching the conversion rate.</p>";
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.convertedAmount) {
+      resultDiv.innerHTML = `<h2>Conversion Result</h2><p>${amount} ${fromCurrency} is equal to ${data.convertedAmount} ${toCurrency}</p>`;
+    } else {
+      resultDiv.innerHTML = "<p>Sorry, there was an issue with the conversion.</p>";
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    resultDiv.innerHTML = "<p>Sorry, there was an error fetching the conversion rate.</p>";
         });
     });
 });

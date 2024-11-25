@@ -28,11 +28,7 @@ app.get("/currency", async (req, res) => {
   console.log("Received query parameters:", from, to, amount);
 
   if (!from || !to) {
-    return res.render("convert", {
-      title: "Currency Converter",
-      from: from || '',
-      to: to || '',
-      amount: amount || '',
+    return res.json({
       convertedAmount: null,
       error: "Please provide both 'from' and 'to' currencies."
     });
@@ -44,26 +40,19 @@ app.get("/currency", async (req, res) => {
     // Call the currency conversion function
     const converted = await currency.getExchangeRates(from, to, amountValue);
     console.log(`Converted Amount: ${converted}`);
-    res.render("convert", {
-      title: "Currency Converter",
-      from,
-      to,
-      amount: amountValue,
-      convertedAmount: converted,  // Pass the converted amount to pug template
+    return res.json({
+      convertedAmount: converted,  // Send the converted amount as part of the JSON response
       error: null
     });
   } catch (error) {
     console.error("Error fetching exchange rates:", error.message);
-    res.render("convert", {
-      title: "Currency Converter",
-      from,
-      to,
-      amount: amountValue,
+    return res.json({
       convertedAmount: null,
       error: "Sorry, there was an error fetching the conversion rate."
     });
   }
 });
+
 
 app.get("/workspaces", async (req, res) => {
     const location = req.query.location || "Toronto";
