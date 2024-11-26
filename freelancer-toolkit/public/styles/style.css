@@ -13,7 +13,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Main Header */
 h1 {
   text-align: center;
   font-size: 36px;
@@ -30,7 +29,6 @@ p {
   margin-bottom: 40px;
 }
 
-/* Button for Currency Converter link */
 #showCurrencyFormLink, #showWorkspaceFormLink, #showTimezoneFormLink {
   display: inline-block;
   padding: 10px 20px;
@@ -41,7 +39,7 @@ p {
   font-size: 18px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-bottom: 20px; /* Add margin-bottom to create space between buttons */
+  margin-bottom: 20px;
 }
 
 #showCurrencyFormLink:hover, #showWorkspaceFormLink:hover, #showTimezoneFormLink:hover {
@@ -49,8 +47,6 @@ p {
   transform: scale(1.05);
 }
 
-
-/* Currency Converter Form */
 #currencyForm {
   margin-top: 40px;
   background-color: #fff;
@@ -104,7 +100,6 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Result Display */
 #result {
   margin-top: 40px;
   padding: 20px;
@@ -129,14 +124,12 @@ button:hover {
   color: #333;
 }
 
-/* Loading animation */
 #result p.loading {
   font-weight: normal;
   font-style: italic;
   color: #888;
 }
 
-/* Animations */
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -157,7 +150,6 @@ button:hover {
   }
 }
 
-/* Currency Converter Specific Styles */
 #currencyForm {
   margin-top: 40px;
   background-color: #fff;
@@ -169,7 +161,6 @@ button:hover {
   margin: 0 auto;
 }
 
-/* Workspace Locator Form */
 #workspaceForm {
   margin-top: 40px;
   background-color: #fff;
@@ -181,7 +172,6 @@ button:hover {
   margin: 0 auto;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   h1 {
     font-size: 28px;

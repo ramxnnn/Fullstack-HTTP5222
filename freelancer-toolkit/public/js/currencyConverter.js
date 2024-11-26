@@ -5,7 +5,6 @@ document.getElementById('showCurrencyFormLink').addEventListener('click', functi
   form.style.display = form.style.display === 'none' ? 'block' : 'none';
 });
 
-// Handle form submission via AJAX
 document.getElementById('currencyConverterForm').addEventListener('submit', function (event) {
   event.preventDefault(); // Prevent default form submission
 
@@ -29,7 +28,7 @@ document.getElementById('currencyConverterForm').addEventListener('submit', func
   resultDiv.style.display = 'block';
   resultDiv.innerHTML = "<p>Loading...</p>";
 
-  // Fetch the conversion result using AJAX
+  // Fetch the conversion result
   fetch(`/currency?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`)
     .then(response => response.json())
     .then(data => {

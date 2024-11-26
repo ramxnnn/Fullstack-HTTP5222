@@ -4,10 +4,10 @@ exports.getTimezone = async (lat, lng, timestamp) => {
     const url = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${process.env.TIMEZONE_API_KEY}`;
 
     try {
-        console.log("Fetching timezone data from:", url); // Log the full URL for debugging
+        console.log("Fetching timezone data from:", url); 
         const response = await axios.get(url);
 
-        console.log("API Response:", response.data); // Log the response data for debugging
+        console.log("API Response:", response.data); 
 
         if (response.data.status === "OK") {
             return {

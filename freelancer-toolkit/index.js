@@ -15,7 +15,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, "public")));
 
-// Middleware to parse query parameters as floats when needed
+// Middleware 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -36,30 +36,21 @@ app.get("/currency", async (req, res) => {
 
   const amountValue = parseFloat(amount) || 1;
 
-  try {
-    const converted = await currency.getExchangeRates(from, to, amountValue);  // Call your currency conversion logic
-    return res.json({
-      convertedAmount: converted,
-    });
-  } catch (error) {
-    console.error("Error fetching exchange rates:", error.message);
-    return res.json({});
-  }
+  const converted = await currency.getExchangeRates(from, to, amountValue);  // Call the currency conversion logic for the API
+  return res.json({
+    convertedAmount: converted,
+  });
 });
 
 // Existing route for the Workspace Locator
 app.get("/workspaces", async (req, res) => {
-  const location = req.query.location || "Toronto";  // Default to Toronto if no location is provided
-  try {
-    const workspaces = await places.findWorkspaces(location);
-    res.json(workspaces);  // Return workspaces as JSON
-  } catch (error) {
-    res.status(500).send({ error: error.message });
-  }
+  const location = req.query.location || "Toronto";  // Default to Toronto if no location is provided here
+  const workspaces = await places.findWorkspaces(location);
+  res.json(workspaces);  // Return all the workspaces as JSON format
 });
 
 app.get("/api/timezones", async (req, res) => {
-  const { location } = req.query; // Get location from query params
+  const { location } = req.query; // Get location from query
 
   if (!location) {
     return res.json({
@@ -67,42 +58,31 @@ app.get("/api/timezones", async (req, res) => {
     });
   }
 
-  try {
-    // Use Google Places API to get coordinates for the location
-    const placesUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(location)}&inputtype=textquery&fields=geometry&key=${process.env.PLACES_API_KEY}`;
-    const placesResponse = await axios.get(placesUrl);
+  const placesUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(location)}&inputtype=textquery&fields=geometry&key=${process.env.PLACES_API_KEY}`;
+  const placesResponse = await axios.get(placesUrl);
 
-    if (
-      !placesResponse.data.candidates ||
-      placesResponse.data.candidates.length === 0
-    ) {
-      return res.json({
-        error: `No results found for "${location}".`,
-      });
-    }
-
-    const { lat, lng } = placesResponse.data.candidates[0].geometry.location;
-
-    // Fetch timezone data using the coordinates
-    const timestamp = Math.floor(Date.now() / 1000); // Current timestamp
-    const tz = await timezone.getTimezone(lat, lng, timestamp);
-
+  if (
+    !placesResponse.data.candidates ||
+    placesResponse.data.candidates.length === 0
+  ) {
     return res.json({
-      timeZoneId: tz.timeZoneId,
-      timeZoneName: tz.timeZoneName,
-      dstOffset: tz.dstOffset,
-      rawOffset: tz.rawOffset,
-    });
-  } catch (error) {
-    console.error("Error fetching timezone data:", error.message);
-    return res.json({
-      error: "Failed to fetch timezone data. Please try again.",
+      error: `No results found for "${location}".`,
     });
   }
+
+  const { lat, lng } = placesResponse.data.candidates[0].geometry.location;
+
+  // Fetch timezone data using the coordinates
+  const timestamp = Math.floor(Date.now() / 1000); // Current timestamp
+  const tz = await timezone.getTimezone(lat, lng, timestamp);
+
+  return res.json({
+    timeZoneId: tz.timeZoneId,
+    timeZoneName: tz.timeZoneName,
+    dstOffset: tz.dstOffset,
+    rawOffset: tz.rawOffset,
+  });
 });
-
-
-
 
 // Start Server
 app.listen(port, () => {
