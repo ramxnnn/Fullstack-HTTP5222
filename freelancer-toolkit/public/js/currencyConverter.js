@@ -1,40 +1,49 @@
 // Show the form when the "Currency Converter" link is clicked
-document.getElementById('showCurrencyFormLink').addEventListener('click', function(event) {
+document.getElementById('showCurrencyFormLink').addEventListener('click', function (event) {
   event.preventDefault();
   const form = document.getElementById('currencyForm');
   form.style.display = form.style.display === 'none' ? 'block' : 'none';
 });
 
 // Handle form submission via AJAX
-document.getElementById('currencyConverterForm').addEventListener('submit', function(event) {
-  event.preventDefault();  // Prevent default form submission
+document.getElementById('currencyConverterForm').addEventListener('submit', function (event) {
+  event.preventDefault(); // Prevent default form submission
 
-  const fromCurrency = document.getElementById('from').value;
-  const toCurrency = document.getElementById('to').value;
-  const amount = document.getElementById('amount').value;
+  const fromCurrency = document.getElementById('from').value.trim();
+  const toCurrency = document.getElementById('to').value.trim();
+  const amount = document.getElementById('amount').value.trim();
   const resultDiv = document.getElementById('result');
 
-  // Check if both "from" and "to" currencies and amount are provided
-  if (!fromCurrency || !toCurrency || !amount) {
-    resultDiv.innerHTML = "<p>Please provide both 'from' and 'to' currencies and an amount.</p>";
+  // Reset the result div and hide it initially
+  resultDiv.style.display = 'none';
+  resultDiv.innerHTML = "";
+
+  // Input validation
+  if (!fromCurrency || !toCurrency || !amount || isNaN(amount)) {
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = "<p style='color:red;'>Please provide valid inputs for all fields.</p>";
     return;
   }
 
-  // Show a loading message while the result is being fetched
+  // Show a loading message
+  resultDiv.style.display = 'block';
   resultDiv.innerHTML = "<p>Loading...</p>";
 
   // Fetch the conversion result using AJAX
   fetch(`/currency?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`)
     .then(response => response.json())
     .then(data => {
-      if (data.convertedAmount) {
-        resultDiv.innerHTML = `<h2>Conversion Result</h2><p>${amount} ${fromCurrency} is equal to ${data.convertedAmount} ${toCurrency}</p>`;
+      if (data && data.convertedAmount) {
+        resultDiv.innerHTML = `
+          <h2>Conversion Result</h2>
+          <p><strong>${amount} ${fromCurrency}</strong> equals <strong>${data.convertedAmount} ${toCurrency}</strong>.</p>
+        `;
       } else {
-        resultDiv.innerHTML = "<p>Sorry, there was an issue with the conversion.</p>";
+        resultDiv.innerHTML = "<p style='color:red;'>Sorry, no conversion result was found.</p>";
       }
     })
     .catch(error => {
-      console.error('Error:', error);
-      resultDiv.innerHTML = "<p>Sorry, there was an error fetching the conversion rate.</p>";
+      console.error('Error fetching conversion:', error);
+      resultDiv.innerHTML = "<p style='color:red;'>An error occurred. Please try again later.</p>";
     });
 });

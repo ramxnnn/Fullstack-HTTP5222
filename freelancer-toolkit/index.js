@@ -1,8 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const axios = require("axios");
 const path = require("path");
 const currency = require("./modules/api/currency");
-const places = require("./modules/api/places"); // Import your places.js file here, only once
+const places = require("./modules/api/places"); 
 const timezone = require("./modules/api/timezone");
 
 dotenv.config();
@@ -57,36 +58,50 @@ app.get("/workspaces", async (req, res) => {
   }
 });
 
-app.get("/timezones", async (req, res) => {
-  const { lat, lng } = req.query; // Extract lat and lng from query
+app.get("/api/timezones", async (req, res) => {
+  const { location } = req.query; // Get location from query params
 
-  // Validate that lat and lng are provided
-  if (!lat || !lng) {
-    return res.render("timezones", {
-      title: "Time Zones",
-      error: "Please provide both latitude and longitude."
+  if (!location) {
+    return res.json({
+      error: "Please enter a location to find its timezone.",
     });
   }
 
-  const timestamp = Math.floor(Date.now() / 1000); // Use the current timestamp
-
   try {
-    // Call the timezone API with valid lat, lng
+    // Use Google Places API to get coordinates for the location
+    const placesUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(location)}&inputtype=textquery&fields=geometry&key=${process.env.PLACES_API_KEY}`;
+    const placesResponse = await axios.get(placesUrl);
+
+    if (
+      !placesResponse.data.candidates ||
+      placesResponse.data.candidates.length === 0
+    ) {
+      return res.json({
+        error: `No results found for "${location}".`,
+      });
+    }
+
+    const { lat, lng } = placesResponse.data.candidates[0].geometry.location;
+
+    // Fetch timezone data using the coordinates
+    const timestamp = Math.floor(Date.now() / 1000); // Current timestamp
     const tz = await timezone.getTimezone(lat, lng, timestamp);
 
-    // Render the timezones view with timezone data
-    return res.render("timezones", {
-      title: "Time Zones",
-      timezone: tz
+    return res.json({
+      timeZoneId: tz.timeZoneId,
+      timeZoneName: tz.timeZoneName,
+      dstOffset: tz.dstOffset,
+      rawOffset: tz.rawOffset,
     });
   } catch (error) {
     console.error("Error fetching timezone data:", error.message);
-    res.render("timezones", {
-      title: "Time Zones",
-      error: "Failed to fetch timezone data. Please try again."
+    return res.json({
+      error: "Failed to fetch timezone data. Please try again.",
     });
   }
 });
+
+
 
 
 // Start Server

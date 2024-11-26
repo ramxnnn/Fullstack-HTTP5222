@@ -3,26 +3,22 @@ html(lang="en")
   head
     title= title
   body
-    h1 Timezone Information
+    h1 Timezone Finder
 
-    //- Form to input lat and lng
+    //- Form to input location name
     form(method="get", action="/timezones")
-      label(for="lat") Latitude:
-      input(type="text", name="lat", id="lat", required)
-      
-      label(for="lng") Longitude:
-      input(type="text", name="lng", id="lng", required)
+      label(for="location") Enter a location:
+      input(type="text", name="location", id="location", required placeholder="E.g., Toronto, Canada")
       
       button(type="submit") Get Timezone
 
     if timezone
+      h2 Timezone Information
       p Timezone ID: #{timezone.timeZoneId}
       p Timezone Name: #{timezone.timeZoneName}
       p DST Offset: #{timezone.dstOffset} seconds
       p Raw Offset: #{timezone.rawOffset} seconds
-    else
-      p Could not fetch timezone data or no data available.
-
-    //- Optionally, show error message if lat or lng are missing
-    if error
+    else if error
       p(style="color:red") #{error}
+    else
+      p Enter a location to find its timezone.

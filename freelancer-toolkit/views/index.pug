@@ -9,7 +9,7 @@ block content
     li 
       a(href="#" id="showWorkspaceFormLink") Workspace Locator
     li 
-      a(href="/timezones") Time Zone Finder
+      a(href="#" id="showTimezoneFormLink") Time Zone Finder
 
   // Currency Converter Form (Initially hidden)
   #currencyForm(style="display:none; margin-top: 20px;")
@@ -26,7 +26,8 @@ block content
       button.btn.btn-success(type="submit") Convert
 
   // Result Display for Currency Converter
-  #result(style="margin-top: 20px;")
+  #result(style="display:none; margin-top: 20px;")
+
 
   // Workspace Locator Form (Initially hidden)
   #workspaceForm(style="display:none; margin-top: 20px;")
@@ -39,6 +40,18 @@ block content
   // Result Display for Workspace Locator
   #workspaceResult(style="margin-top: 20px;")
 
+  // Time Zone Finder Form (Initially hidden)
+  #timezoneForm(style="display:none; margin-top: 20px;")
+    form#timezoneFinderForm
+      .form-group
+        label(for="timezoneLocation") Enter a Location (e.g., New York):
+        input#timezoneLocation.form-control(type="text" required)
+      button.btn.btn-info(type="submit") Find Time Zone
+
+  // Result Display for Time Zone Finder
+  #timezoneResult(style="margin-top: 20px;")
+
   // Link to external JavaScript files
   script(src="/js/currencyConverter.js")
   script(src="/js/workspaceLocator.js")
+  script(src="/js/timezoneFinder.js")
